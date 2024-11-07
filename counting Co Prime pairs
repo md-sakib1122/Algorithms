@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define LL long long int
+
+LL cnt[1000001];
+LL cnt2[1000001];
+
+void solve() {
+    LL n;
+    cin >> n;
+
+    // Step 1: Count frequency of each number in the array
+    for(LL i = 0; i < n; i++) {
+        LL x;
+        cin >> x;
+        cnt[x]++;
+    }
+
+    // Step 2: Calculate cnt2 for each divisor
+    for(LL i = 1; i <= 1000000; i++) {
+        for(LL j = i; j <= 1000000; j += i) {
+            cnt2[i] += cnt[j];
+        }
+        // Calculate the number of pairs for each divisor i
+        cnt2[i] = cnt2[i] * (cnt2[i] - 1) / 2;
+    }
+
+    // Step 3: Subtract counts for higher multiples of i
+    for(LL i = 1000000; i >= 1; i--) {
+        for(LL j = 2 * i; j <= 1000000; j += i) {
+            cnt2[i] -= cnt2[j];
+        }
+    }
+
+    // The result is the number of pairs with gcd = 1
+    cout << cnt2[1] << endl;
+}
+
+int main() {
+    solve();
+    return 0;
+}
